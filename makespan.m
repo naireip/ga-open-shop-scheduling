@@ -55,8 +55,11 @@ for ix = 1: numOfMach
                        needToCompareGroup{ix,kx} = min(pureJobInfo(ix, multipartIdx{mx} )  )
                     end
                     
-               end               
-        end    
+               end
+        else  % job order can be determined immediately
+            tmpProcTime = pureJobInfo(:,ix);            
+            cTable(:,ix) = tmpProcTime(jobDealOrder(:,ix)) 
+        end
 end
 
 
