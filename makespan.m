@@ -45,7 +45,7 @@ for ix = 1: numOfMach
                % find out 1's ,then scheule it
                [cndIx] = find(N>1) %canNotDetermineNow
                find(N == 1 )
-               shouldBeScheduleNow = find(N == 1 )
+               shouldBeScheduleNow = find(N == 1 ) 
                %find out the location in jobDealOrder
                kxx =1;
                shouldBeShceduleNowIndex=[];
@@ -87,12 +87,13 @@ for ix = 1: numOfMach
                    end
                    %-==============================
                    orderIndex = 1;
+                     original_compareArray = pureJobInfo(emptyCellIndex, unique(jobDealOrder(emptyCellIndex,ix)))
                    while(emptyCellCnt > 0 )  % while there  still some one is not deternined order
                        %find out the empty index and use the empty ones to find out the min to scheduling first                     
                       compareArray = pureJobInfo(emptyCellIndex, unique(jobDealOrder(emptyCellIndex,ix)))
-                       scheduleFirstIndex =  find(compareArray == min(compareArray ) )  %kx denote the group number
+                       scheduleFirstIndex =  find(original_compareArray == min(compareArray ) ) + multipartIdx{1}(1) -1  %kx denote the group number
                        %   needToCompareGroup{ix,kx} = min(pureJobInfo(ix, multipartIdx{kx} )  )
-                        tmp = jobDealOrder(:,ix);
+                        tmp = jobDealOrder(:,ix)
                        cTable{scheduleFirstIndex, ix} = [pureJobInfo(scheduleFirstIndex, tmp(scheduleFirstIndex) ), orderIndex]
                        orderIndex = orderIndex +1;  
                        
