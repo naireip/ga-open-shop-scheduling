@@ -8,7 +8,8 @@ global numOfJob
 pureJobInfo = jobInfo(2:end-1,:)
 jobWeight = jobInfo(end, :);
 % Va = [5 2 3 4 6 7 8 9 1];
-Va =[ 9 8 4 5 6 7 1 2 3]
+%Va =[ 9 8 4 5 6 7 1 2 3]
+Va =[ 8 9 7 1 4 3 2 5 6]
 numOfMach =3
 numOfJob = 3
 % Machine deal order
@@ -89,7 +90,7 @@ for ix = 1: numOfMach
                    end
                    %-==============================
                    orderIndex = 1;
-                     original_compareArray = pureJobInfo(emptyCellIndex, unique(jobDealOrder(emptyCellIndex,ix)))
+                     original_compareArray = pureJobInfo(:, unique(jobDealOrder(emptyCellIndex,ix)))
                    while(emptyCellCnt > 0 )  % while there  still some one is not deternined order
                        %find out the empty index and use the empty ones to find out the min to scheduling first                     
                       compareArray = pureJobInfo(emptyCellIndex, unique(jobDealOrder(emptyCellIndex,ix)))
@@ -240,18 +241,20 @@ for col = 1: size(cTable,2)
                                          %find out not empty ================
                                          counter =1;
                                         for nullx =1: numOfMach
-                                            if(~isempty(timeTable{nullx,col}))
+                                            if(~isempty(timeTable{nullx,col}))                                                
                                                 notNull(counter) = nullx 
                                                 counter = counter +1;
                                             end
                                         end
+                                        
+                                        
                                          %===================
                                         % shouldAlreadyBeenScheduleIndex = setdiff(sameIndex, ix)
-                                         shouldAlreadyBeenScheduleIndex = notNull(1)
+                                         shouldAlreadyBeenScheduleIndex = intersect(notNull,sameIndex)
                                          sameJobMax = timeTable{shouldAlreadyBeenScheduleIndex, col}.end
-                                         for dx = 1: length(notNull)
-                                             if(timeTable{notNull(dx),col}.end > sameJobMax )
-                                                 sameJobMax = timeTable{notNull(dx),col}.end
+                                         for dx = 1: length(shouldAlreadyBeenScheduleIndex)
+                                             if(timeTable{shouldAlreadyBeenScheduleIndex(dx),col}.end > sameJobMax )
+                                                 sameJobMax = timeTable{shouldAlreadyBeenScheduleIndex(dx),col}.end
                                              end
                                          end
                                          
