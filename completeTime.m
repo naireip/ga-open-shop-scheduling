@@ -1,13 +1,14 @@
-function  timeTable = completeTime(Va)
+function  [maxTimeLength, timeTable] = completeTime(Va)
 global jobInfo
 global c
 global numOfMach
 global numOfJob
 
-load jobInfo.txt
+%load jobInfo.txt
 pureJobInfo = jobInfo(2:end-1,:)
 jobWeight = jobInfo(end, :);
-Va = [5 2 3 4 6 7 8 9 1];
+% Va = [5 2 3 4 6 7 8 9 1];
+Va =[ 9 8 4 5 6 7 1 2 3]
 numOfMach =3
 numOfJob = 3
 % Machine deal order
@@ -25,7 +26,7 @@ for ix =1 : numOfMach
        end 
     end
 end
-A = mod(jobDealOrder,numOfMach);
+A = mod(jobDealOrder,numOfMach)
 
 A (find(mod(A,numOfMach) ==0 ) )= numOfMach
 jobDealOrder = A
@@ -63,7 +64,8 @@ for ix = 1: numOfMach
                for mx = 1: length(multipart) 
                    jobDealOrder(multipart(mx))
                    multipart(mx)
-                    multipartIdx{mx} = find(jobDealOrder(:,ix) == jobDealOrder(multipart(mx),ix))
+%                    multipartIdx{mx} = find(jobDealOrder(:,ix) == jobDealOrder(multipart(mx),ix))
+                     multipartIdx{mx} = find(jobDealOrder(:,ix) == multipart(mx))
                end 
                
                %find out the processing order of same job 
@@ -252,28 +254,13 @@ for col = 1: size(cTable,2)
   %====================================            
          end          
       end
- % end 
-end
+
  
-%c(1,1)=jobInfo(2,Va(1) );
+maxTimeLength = timeTable{1,numOfJob}.end
+for ix = 1: numOfMach   
+    if (timeTable{ix, numOfJob}.end > maxTimeLength)
+        maxTimeLength  = timeTable{ix, numOfJob}.end;
+    end
+end
 
-
-
-
-% 
-% for k=2:size(jobInfo,1)-2
-%    c(1,k)=c(1,k-1)+jobInfo(k+1,Va(1));
-% end
-% 
-% for ix=2:size(jobInfo,2)
-%   c(ix,1)=c(ix-1,1)+jobInfo(2,Va(ix));
-% end
-% 
-% 
-% for ix=2:size(jobInfo,2)
-%    for k=2:size(jobInfo,1)-1
-%      c(ix,k)=max( c(ix-1,k),c(ix,k-1) )+jobInfo(k+1,Va(ix));
-%    end   
-% end
-% 
-% timeLength=c( size(jobInfo,2) ,size(jobInfo,1)-1 );
+end
