@@ -35,7 +35,7 @@ chromosome=[];
 everyGenResult=[];
 NowGen=1; %目前是初代染色體
 
-numOfMach=size(jobInfo,1)-1
+numOfMach=size(jobInfo,1)-2
 numOfJob=size(jobInfo,2)
 
    %Pm=input('Probability of mutation =?\n')
@@ -67,7 +67,7 @@ numOfJob=size(jobInfo,2)
    %swMutation=1
    swDynaGraph=menu('Do you want dynamic graph plotting?','YES','NO')
    %swDynaGraph=1
-   gen_chromosome(pop_size,numOfJob)   %size denote how many jobs
+   gen_chromosome(pop_size,numOfJob * numOfMach)   %size denote how many jobs
 %debug====================================================
 
 

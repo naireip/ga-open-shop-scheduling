@@ -49,7 +49,7 @@ end
 
 %GA_object            %計算所有染色體的目標值
 for ix=1:size(chromosome,1)
-   objValue(ix)=1/makespan(chromosome(ix,:));
+   objValue(ix)=1/completeTime(chromosome(ix,:));
 end
 objValue;
 ObjChromosome=[objValue',chromosome];
@@ -63,7 +63,7 @@ chromosome=ObjChromosome(:,2:size(ObjChromosome,2) );
 everyGenResult{TotalGen,1}=chromosome;
 everyGenResult{TotalGen,2}=sortedOandC(1,1);
 
-fprintf('到目前為止的最佳makespan是%d\n',  makespan(chromosome(1,:)));
+fprintf('到目前為止的最佳makespan是%d\n',  completeTime(chromosome(1,:)));
 fprintf('到目前為止的最佳job_seq是 %d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d \n' ,  chromosome(1,:) );
 
 
@@ -76,7 +76,7 @@ if swDynaGraph==1
   whitebg(1,'k')
 
   for ix=TotalGen:size(everyGenResult,1)
-     temp(ix)=makespan(everyGenResult{ix,1}(1,:) );
+     temp(ix)=completeTime(everyGenResult{ix,1}(1,:) );
   end 
 
   set(gca,'ylim',[min(temp)-10, max(temp)+10])
@@ -93,8 +93,8 @@ if swDynaGraph==1
   end
   grid on
   xlabel('世代數')
-  ylabel('makespan')
-  title(['使用基因演算法的makespan變化折線圖,  第1代到第',num2str(TotalGen),'代'] )
+  ylabel('completeTime')
+  title(['使用基因演算法的complete Time變化折線圖,  第1代到第',num2str(TotalGen),'代'] )
 
   %axis fill tight
 end
