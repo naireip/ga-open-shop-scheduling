@@ -257,8 +257,11 @@ for col = 1: size(cTable,2)
                                      if ( (cTable{ix,col}(2) == dealOrderNow) & isempty(timeTable{ix,col}))
                                          maxSameRowCol_1 = timeTable{ix, col-1}.end  %initial value                                         
                                          sameIndex = find(jobDealOrder(:,col)==jobDealOrder(ix,col)  )
-                                         shouldAlreadyBeenScheduleIndex = setdiff(sameIndex, ix)
+                                         shouldAlreadyBeenScheduleIndex = setdiff(sameIndex, col)
                                              sameJobNumberCol_1 = 0;  %initial value of the other considered issue 
+                                             if ( ~isempty( shouldAlreadyBeenScheduleIndex) & ~isempty(timeTable{shouldAlreadyBeenScheduleIndex, col}) )
+                                                 sameJobNumberCol_1 = timeTable{shouldAlreadyBeenScheduleIndex, col}.end
+                                             end
                                                  [sameJobIndex, sameJobIdY] = find(jobDealOrder(:,1:col-1) == jobDealOrder(ix,col))
 
                                                  if (~isempty(sameJobIndex) )                          
