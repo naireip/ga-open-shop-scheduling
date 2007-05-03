@@ -48,8 +48,15 @@ for i=1:round(pop_size*Pm)
 end
 
 %GA_object            %計算所有染色體的目標值
+maxValue = 0;
 for ix=1:size(chromosome,1)
-   objValue(ix)=1/completeTime(chromosome(ix,:));
+    if maxValue < completeTime(chromosome(ix,:))
+       maxValue = completeTime(chromosome(ix,:));
+    end
+end
+maxValue
+for ix=1:size(chromosome,1)
+   objValue(ix)= maxValue - completeTime(chromosome(ix,:));
 end
 objValue;
 ObjChromosome=[objValue',chromosome];
@@ -69,7 +76,7 @@ fprintf('到目前為止的最佳job_seq是 %d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-
 
 
 %Draw the dynamic line---------------------------------------------------------------------
-
+close all
 if swDynaGraph==1
   shg
   %set(gcf,'')
