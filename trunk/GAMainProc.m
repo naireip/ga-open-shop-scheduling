@@ -63,7 +63,7 @@ chromosome=ObjChromosome(:,2:size(ObjChromosome,2) );
 everyGenResult{TotalGen,1}=chromosome;
 everyGenResult{TotalGen,2}=sortedOandC(1,1);
 
-fprintf('到目前為止的最佳makespan是%d\n',  completeTime(chromosome(1,:)));
+fprintf('到目前為止的最佳 complete time 是%d\n',  completeTime(chromosome(1,:)));
 fprintf('到目前為止的最佳job_seq是 %d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d \n' ,  chromosome(1,:) );
 
 
