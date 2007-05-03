@@ -272,10 +272,9 @@ for col = 1: size(cTable,2)
                                                       end                             
                                                  end                              
                                                  
-                                        
-                                                          
-                                      
-                                     
+                                         
+                                         startTime = max(sameJobNumberCol_1 , maxSameRowCol_1)
+                                         
                                          endTime = startTime + cTable{ix,col}(1)
                                          timeTable{ix,col}= struct('start',startTime, 'end',endTime,'job_no',jobDealOrder(ix,col) );
                                          scheduleCnt = scheduleCnt -1;
