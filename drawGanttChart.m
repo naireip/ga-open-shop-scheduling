@@ -7,6 +7,9 @@ global TotalGen
 global c
 global jobInfo
 global numOfGen
+global timeTable
+
+timeTable
 %可以根據makespan那裡所得的scheduling matrix來繪圖
 %vector=everyGenResult{size(everyGenResult,1),1}
 OnlyjobInfo=jobInfo(2:size(jobInfo,1),:);     

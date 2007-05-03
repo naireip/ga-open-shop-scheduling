@@ -1,6 +1,8 @@
 %GA_oss denote the Genetic Algorithm Open Shop Scheduling Problem
 
 function GA_oss()
+clear all
+close all
 global Pm
 global Pc        %probability of crossover
 global chromosome
@@ -10,9 +12,11 @@ global numOfGen
 global pop_size
 global TotalGen
 global jobInfo
+global timeTable
 %global someValue
 global c          %every job of machine makespan
 global temp
+
 
 GA_init            % to generate the initial chromosome, and just iniialize some variables
 
@@ -31,6 +35,7 @@ end
 
 %Graphical Interface output------------------
 %Tell the user what kind of Crossover & Mutation they used
-drawGanttChart
+%drawGanttChart
+drawGanttChart2007
 %draw lineChart
 %saveToFile
