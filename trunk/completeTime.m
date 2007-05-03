@@ -264,7 +264,7 @@ for col = 1: size(cTable,2)
                                                  if (~isempty(sameJobIndex) )                          
                                                       for Idx = sameJobIndex(1): sameJobIndex(end)
                                                           for Idy = sameJobIdY(1): sameJobIdY(end)
-                                                              timeTable{Idx(1),Idy(1)}.end
+                                                            %  timeTable{Idx(1),Idy(1)}.end
                                                               if (timeTable{Idx, Idy}.end > sameJobNumberCol_1 )
                                                                   sameJobNumberCol_1 = timeTable{Idx, Idy}.end 
                                                               end                        
@@ -272,11 +272,7 @@ for col = 1: size(cTable,2)
                                                       end                             
                                                  end                              
                                                  
-                                          if(isempty(shouldAlreadyBeenScheduleIndex))   %is there any same Job# already been scheduled
-                                              startTime = maxSameRowCol_1
-                                          else
-                                                  startTime = max(sameJobNumberCol_1 , maxSameRowCol_1)
-                                          end
+                                        
                                                           
                                       
                                      
