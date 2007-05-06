@@ -4,6 +4,7 @@ global c
 global numOfMach
 global numOfJob
 global timeTable
+global jobDealOrder
 %load jobInfo.txt
 pureJobInfo = jobInfo(2:end-1,:)
 jobWeight = jobInfo(end, :);
@@ -12,11 +13,15 @@ jobWeight = jobInfo(end, :);
 %Va =[ 8 9 7 1 4 3 2 5 6]
 %Va =[ 1 8 9 3 7 2 6 5 4]
 %Va =[ 3 5 8 7 9 2 1 4 6]
-Va = [5,2,4,3,8,6,1,7,9]
+%Va = [5,2,4,3,8,6,1,7,9]
 save Va
-numOfMach =3
-numOfJob = 3
+%numOfMach =3
+%numOfJob = 3
 % Machine deal order
+numOfMach 
+numOfJob 
+
+
 tmpReshape =reshape(Va, numOfMach, numOfJob)'
 jobDealOrder = zeros(numOfJob, numOfMach);
 
@@ -37,7 +42,7 @@ A (find(mod(A,numOfMach) ==0 ) )= numOfMach
 jobDealOrder = A
 cTable = cell(numOfMach, numOfJob);  %by using cTable to determine the processing order of the same job (multiple groups)
 %till now the order is distribute into the matrix
-
+timeTable = cell(numOfMach, numOfJob); 
 %Next, following the jobDealOrder , we will decide which job should be process first
 %while in the same order, shortest processing time first
 
@@ -63,6 +68,7 @@ for ix = 1: numOfMach
                    %the content in cTable{,} is [processing time , processing order]
                    
                    cTable{shouldBeShceduleNowIndex(nx),ix} = [ pureJobInfo(shouldBeShceduleNowIndex(nx),shouldBeScheduleNow(nx)) , 1] % the latest 1 denote to be scheduling first 
+                 %  timeTable{shouldBeShceduleNowIndex(nx),ix} = struct('start',0,'end',pureJobInfo(shouldBeShceduleNowIndex(nx),shouldBeScheduleNow(nx)), 'job_no',shouldBeShceduleNowIndex(nx))
                end
                directOrderList =1:length(N);
                multipart = directOrderList(find ( (N >1) >0 ))   %which job numbers are multiple, can not be determine the order now
@@ -100,7 +106,7 @@ for ix = 1: numOfMach
                        %find out the empty index and use the empty ones to find out the min to scheduling first                     
                       compareArray = pureJobInfo(emptyCellIndex, unique(jobDealOrder(emptyCellIndex,ix)))
                       multipartIdx{1}
-                       find(original_compareArray == min(compareArray ) )
+                      find(original_compareArray == min(compareArray ) )
                        
                        for gx = 1: length(original_compareArray)
                            if (original_compareArray(gx) == min(compareArray) )
@@ -134,6 +140,7 @@ for ix = 1: numOfMach
             for i =1: numOfMach
            temp(i) =  pureJobInfo(i,jobDealOrder(i, ix))
             end
+            
            for idx = 1: size(pureJobInfo,1)                
                 cTable{idx, ix} = [temp(idx),1];   % the latest 1 denote to be scheduling first
             end
@@ -142,187 +149,85 @@ end
  
 % Till now, we use cTable to record the processing time and processing order, and the determing process is finished. 
 timeTable =cell(size(cTable))  %this time table is for draw the gantt chart
+toBeDetermineOrderCol = cell(1,1)
+toBeDetermineOrderCol=[];
 
-for col = 1: size(cTable,2)
-  %for row = 1: size(cTable,1)   
-  %====================================
-  emptyCnt = 0;
-      for ixx= 1: numOfMach  
-          if( isempty(timeTable{ixx,col}) )
-               emptyCnt = emptyCnt + 1;
-          end            
-       end         
-  %====================================
-      while(emptyCnt > 0 )
-          orderIndex = 1;
-           scheduleCnt =0;
-          %============================
-              for ixx= 1: numOfMach  
-                  if( cTable{ixx,col}(2) == orderIndex )
-                     scheduleCnt = scheduleCnt + 1;
-                   end            
-              end              
-          %===========================
-         while(scheduleCnt > 0) 
-             if (col ==1)
-                 for row = 1: size(cTable,1)
-                     if (cTable{row,col}(2) == 1 & isempty(timeTable{row,col}))
-                        timeTable{row,col}= struct('start',0, 'end',cTable{row,col}(1),'job_no',jobDealOrder(row,col) );
-                        scheduleCnt = scheduleCnt -1;
-                     end
-                 end
-                  % 找出最大的順序
-                  maxDealOrder = cTable{row,col}(2)
-                  for row = 1: size(cTable,1)
-                     if (cTable{row,col}(2) > maxDealOrder )
-                         maxDealOrder = cTable{row,col}(2)
-                     end
+
+for col =1:size(cTable,2)
+    for row =1: size(cTable,1)
+        toBeDetermineCol{row} = timeTable{row,col}
+        toBeDetermineOrderCol(row) = cTable{row,col}(2)
+    end   
+        [emptyCnt, maxOrder] = getEmptyCountAndMaxOrder(toBeDetermineCol,toBeDetermineOrderCol)
+        %=============
+        dealOrder =1;
+        while(emptyCnt >0)           
+          while dealOrder <= maxOrder
+              %find out the index
+              [idx]=find(toBeDetermineOrderCol == dealOrder)
+             gx=[]
+              for dx = 1: length(idx)
+                  if (isempty(timeTable{idx(dx),col}) && length(idx) > 1 )
+                      gx =[gx, idx(dx)]
                   end                  
-                 %====================================
-                 dealOrderNow  = 2;
-                  for row = 1: size(cTable,1)
-                     if (cTable{row,col}(2) ~= 1 )
-                         %dealOrderNow = orderIndex;
-                        while( dealOrderNow <= maxDealOrder && cTable{row,col}(2)== dealOrderNow )
-                           for ix=1:numOfMach
-                               if ( cTable{row,col}(2) == dealOrderNow & isempty(timeTable{row,col}))
-                                   sameIndex = find(jobDealOrder(:,col)== jobDealOrder(row,col) )
-                                   shouldAlreadyBeenScheduleIndex =[];
-                                   for jjx = 1: numOfMach
-                                       if (~isempty(timeTable{jjx, col}) )
-                                          shouldAlreadyBeenScheduleIndex = [shouldAlreadyBeenScheduleIndex ,jjx];
-                                       end
-                                   end
-                                   for jix = 1: length(shouldAlreadyBeenScheduleIndex)                                       
-                                          startTime = 0;
-                                       if ~isempty(timeTable{shouldAlreadyBeenScheduleIndex(jix), col})
-                                           if (startTime < cTable{shouldAlreadyBeenScheduleIndex(jix), col}(1))
-                                              startTime = max(cTable{shouldAlreadyBeenScheduleIndex(jix), col}(1))
-                                           end
-                                       end
-                                   end
-                                   endTime = startTime + cTable{ix,col}(1)
-                                   timeTable{row,col}= struct('start',startTime, 'end',endTime,'job_no',jobDealOrder(ix,col) );
-                                   scheduleCnt = scheduleCnt -1;
-                               end
-                           end       
-                           dealOrderNow = dealOrderNow + 1;
-                           orderIndex = dealOrderNow;
-                        end  %end of while                       
-                     end  %end of if
-                  end %end of for
-             else  %col > 1
-                 scheduleCnt = 0
-                   %============================
-                   for ixx= 1: numOfMach  
-                       if( cTable{ixx,col}(2) == orderIndex )
-                        scheduleCnt = scheduleCnt + 1;
-                       end            
-                   end              
-                  %===========================
-                  cTable{row,col}(2)
-                  isempty(timeTable{row,col})
-                  timeTable{row,col}
-                  if (cTable{row,col}(2) == 1 & isempty(timeTable{row,col}))   
-                    for row = 1: numOfMach
-                      if (cTable{row,col}(2) == 1 )                    
-                         %% calculate the begin time of which deal order == 1
-                         %consider the max (same row, col-1 , same job #, col -1)
-                         
-                         maxSameRowCol_1 = timeTable{row, col-1}.end  %initial value
-                         
-                         sameJobNumberCol_1 = 0;  %initial value of the other considered issue 
-                         [sameJobIndex, sameJobIdY] = find(jobDealOrder(:,1:col-1) == jobDealOrder(row,col))
-                         
-                         if (~isempty(sameJobIndex) )                          
-                              for Idx = sameJobIndex(1): sameJobIndex(end)
-                                  for Idy = sameJobIdY(1): sameJobIdY(end)
-                                      timeTable{Idx(1),Idy(1)}.end
-                                      if (timeTable{Idx, Idy}.end > sameJobNumberCol_1 )
-                                          sameJobNumberCol_1 = timeTable{Idx, Idy}.end 
-                                      end                        
-                                  end
-                              end                             
+              end
+              if ~isempty(gx)
+                 idx =gx
+              end
+
+              tempIdx = idx(1);
+              for dx =1:length(idx)-1
+                 if(length(idx) > 1)
+                    if( cTable{idx(dx),col}(1) < cTable{idx(dx+1),col}(1))
+                         tempIdx = idx(dx);
+                    else
+                       tempIdx = idx(dx+1);
+                    end                    
+                 end   
+                    idx = tempIdx
+              end
+              
+              idx
+              sameJob = cell(1,1)
+              %find out the max value of same job end time
+                for  sameJobJdx =1:col
+                     for sameJobIdx = 1:size(cTable,1)
+                         if(jobDealOrder(sameJobIdx, sameJobJdx) == jobDealOrder(idx,col))
+                             sameJob{length(sameJob)+1} = [sameJobIdx, sameJobJdx]
                          end
-                         %%=====================================
-                         startTime = max (maxSameRowCol_1, sameJobNumberCol_1)
-                         endTime = startTime + cTable{row,col}(1)
-                        timeTable{row,col}= struct('start', startTime, 'end',endTime,'job_no',jobDealOrder(row,col) );
-                        scheduleCnt = scheduleCnt -1;
-                      end
-                    end
-                else % (cTable{row,col}(2) ~= 1 & col >1
-                               % 找出最大的順序
-                              maxDealOrder = cTable{row,col}(2)
-                              for row = 1: size(cTable,1)
-                                if (cTable{row,col}(2) > maxDealOrder )
-                                    maxDealOrder = cTable{row,col}(2)
-                                end
-                              end                  
-                            %====================================                        
-                            %% calculate the begin time of which deal order == 1
-                            %consider the max (same row, col-1 , same job #,col -1)
-                              dealOrderNow = orderIndex;
-                              while( dealOrderNow <= maxDealOrder & emptyCnt > 0)                                 
-                                 for ix=1:numOfMach
-                                     ix 
-                                     col
-                                     cTable{ix,col}(2) 
-                                     dealOrderNow
-                                     if ( (cTable{ix,col}(2) == dealOrderNow) & isempty(timeTable{ix,col}))
-                                         maxSameRowCol_1 = timeTable{ix, col-1}.end  %initial value                                         
-                                         sameIndex = find(jobDealOrder(:,col)==jobDealOrder(ix,col)  )
-                                         shouldAlreadyBeenScheduleIndex = setdiff(sameIndex, col)
-                                             sameJobNumberCol_1 = 0;  %initial value of the other considered issue 
-                                             try
-                                             if ( ~isempty( shouldAlreadyBeenScheduleIndex) & ~isempty(timeTable{shouldAlreadyBeenScheduleIndex, col})  )
-                                                 sameJobNumberCol_1 = timeTable{shouldAlreadyBeenScheduleIndex, col}.end
-                                             end
-                                             catch 
-                                                 shouldAlreadyBeenScheduleIndex
-                                                 rethrow(lasterror)
-                                             end
-                                                 [sameJobIndex, sameJobIdY] = find(jobDealOrder(:,1:col-1) == jobDealOrder(ix,col))
-
-                                                 if (~isempty(sameJobIndex) )                          
-                                                      for Idx = sameJobIndex(1): sameJobIndex(end)
-                                                          for Idy = sameJobIdY(1): sameJobIdY(end)
-                                                            %  timeTable{Idx(1),Idy(1)}.end
-                                                              if (timeTable{Idx, Idy}.end > sameJobNumberCol_1 )
-                                                                  sameJobNumberCol_1 = timeTable{Idx, Idy}.end 
-                                                              end                        
-                                                          end
-                                                      end                             
-                                                 end                              
-                                                 
-                                         
-                                         startTime = max(sameJobNumberCol_1 , maxSameRowCol_1)
-                                         
-                                         endTime = startTime + cTable{ix,col}(1)
-                                         timeTable{ix,col}= struct('start',startTime, 'end',endTime,'job_no',jobDealOrder(ix,col) );
-                                         scheduleCnt = scheduleCnt -1;
-                                     end
-                                 end       
-                                dealOrderNow = dealOrderNow + 1;
-                                orderIndex = dealOrderNow;
-                              end
-      %        end 
-       %      end
-                  end
+                     end
                 end
-             end  %end of if (col ==1)
-         %====================================
-      emptyCnt = 0;
-      for ixx= 1: numOfMach  
-          if( isempty(timeTable{ixx,col}) )
-               emptyCnt = emptyCnt + 1
-          end            
-       end         
-  %====================================            
-         end          
-      end
+             %=========================================
+             %deal the find out             
+                maxRowEndTime = getTheMaxRowEndTime(idx,col, sameJob ,cTable)
+                maxSameJobEndTimeNow = getTheSameJobEndTimeNow(idx,col, sameJob ,cTable)              
+                beginTime = max(maxRowEndTime, maxSameJobEndTimeNow)
+                timeTable{idx,col}=struct('start',beginTime, 'end',beginTime + cTable{idx,col}(1),'job_no',jobDealOrder(idx,col) );                                                    
+              % if the same order is deal finished dealOrder++, find the min dealOrder now
+               dealOrderArray=[]
+               for ixx =1:size(cTable,1)
+                   if(isempty(timeTable{ixx,col}))
+                       if(dealOrder <= toBeDetermineOrderCol(ixx) )
+                           dealOrderArray = [dealOrderArray, toBeDetermineOrderCol(ixx)]; 
+                       end
+                   end
+               end
+               if (~isempty(dealOrderArray))
+                  dealOrder = min(dealOrderArray)
+               end
+          %================
+          for row =1: size(cTable,1)
+            toBeDetermineCol{row} = timeTable{row,col}
+            toBeDetermineOrderCol(row) = cTable{row,col}(2)
+         end
+          [emptyCnt, maxOrder] = getEmptyCountAndMaxOrder(toBeDetermineCol,toBeDetermineOrderCol)
+        %=============
+          end   
+        end
+end
 
- 
+%================================================
+
 maxTimeLength = timeTable{1,numOfJob}.end
 for ix = 1: numOfMach   
     if (timeTable{ix, numOfJob}.end > maxTimeLength)
