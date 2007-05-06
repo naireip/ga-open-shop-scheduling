@@ -8,12 +8,14 @@ global jobDealOrder
 %load jobInfo.txt
 pureJobInfo = jobInfo(2:end-1,:)
 jobWeight = jobInfo(end, :);
-% Va = [5 2 3 4 6 7 8 9 1];
+% Va = [5 2 3 4 6 7 8 9 1]; %max=39
 %Va =[ 9 8 4 5 6 7 1 2 3]
 %Va =[ 8 9 7 1 4 3 2 5 6]
 %Va =[ 1 8 9 3 7 2 6 5 4]
 %Va =[ 3 5 8 7 9 2 1 4 6]
 %Va = [5,2,4,3,8,6,1,7,9]
+%Va =[8,6,9,1,3,5,2,7,4]  %max=39
+%Va=[ 5 8 2 4 7 1 6 9 3]   %max=70
 save Va
 %numOfMach =3
 %numOfJob = 3
@@ -40,6 +42,7 @@ A = mod(jobDealOrder,numOfMach)
 
 A (find(mod(A,numOfMach) ==0 ) )= numOfMach
 jobDealOrder = A
+clear A c tmpReshape
 cTable = cell(numOfMach, numOfJob);  %by using cTable to determine the processing order of the same job (multiple groups)
 %till now the order is distribute into the matrix
 timeTable = cell(numOfMach, numOfJob); 
@@ -160,9 +163,8 @@ for col =1:size(cTable,2)
     end   
         [emptyCnt, maxOrder] = getEmptyCountAndMaxOrder(toBeDetermineCol,toBeDetermineOrderCol)
         %=============
-        dealOrder =1;
-        while(emptyCnt >0)           
-          while dealOrder <= maxOrder
+        dealOrder =1;                 
+          while (dealOrder <= maxOrder & emptyCnt >0)
               %find out the index
               [idx]=find(toBeDetermineOrderCol == dealOrder)
              gx=[]
@@ -175,17 +177,26 @@ for col =1:size(cTable,2)
                  idx =gx
               end
 
-              tempIdx = idx(1);
-              for dx =1:length(idx)-1
-                 if(length(idx) > 1)
-                    if( cTable{idx(dx),col}(1) < cTable{idx(dx+1),col}(1))
-                         tempIdx = idx(dx);
-                    else
-                       tempIdx = idx(dx+1);
-                    end                    
-                 end   
-                    idx = tempIdx
+               %find out the smallest time
+              minTimeValue = cTable{idx(1),col}(1)
+              TempIdx=idx(1)
+              for dx =1:length(idx)
+                  dx
+                  fprintf('the col =%d\n',col)
+                  fprintf('the row =%d\n',idx(dx))
+                 if (cTable{idx(dx),col}(1) < minTimeValue && isempty(timeTable{idx(dx),col}) )
+                     minTimeValue = cTable{idx(dx),col}(1)
+                     TempIdx = idx(dx)
+                 end                 
               end
+               fprintf('the col =%d\n',col)
+                  fprintf('the row =%d\n',idx(dx))
+              idx = TempIdx
+             
+              minTimeValue
+              
+              
+              
               
               idx
               sameJob = cell(1,1)
@@ -221,8 +232,7 @@ for col =1:size(cTable,2)
             toBeDetermineOrderCol(row) = cTable{row,col}(2)
          end
           [emptyCnt, maxOrder] = getEmptyCountAndMaxOrder(toBeDetermineCol,toBeDetermineOrderCol)
-        %=============
-          end   
+        %=============          
         end
 end
 

@@ -13,6 +13,8 @@ global pop_size
 global TotalGen
 global jobInfo
 global timeTable
+global numOfJob
+global numOfMach
 %global someValue
 global c          %every job of machine makespan
 global temp

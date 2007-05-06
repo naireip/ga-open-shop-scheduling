@@ -14,6 +14,8 @@ global scheduMatrix
 global jobInfo
 global boundGen
 global someValue
+global numOfMach
+global numOfJob
 
 close all
 Ans=menu('Do you want to use the random generator?','Yes¡AI wanna use.','No, just load the file sample is ok.');
