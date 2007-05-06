@@ -8,8 +8,8 @@ global jobDealOrder
 %load jobInfo.txt
 pureJobInfo = jobInfo(2:end-1,:)
 jobWeight = jobInfo(end, :);
-% Va = [5 2 3 4 6 7 8 9 1]; %max=39
-%Va =[ 9 8 4 5 6 7 1 2 3]
+%Va = [5 2 3 4 6 7 8 9 1]; %max=44
+%Va =[ 9 8 4 5 6 7 1 2 3] %51
 %Va =[ 8 9 7 1 4 3 2 5 6]
 %Va =[ 1 8 9 3 7 2 6 5 4]
 %Va =[ 3 5 8 7 9 2 1 4 6]
@@ -238,11 +238,12 @@ end
 
 %================================================
 
-maxTimeLength = timeTable{1,numOfJob}.end
+maxTimeLength = timeTable{1,numOfJob}.end;
 for ix = 1: numOfMach   
     if (timeTable{ix, numOfJob}.end > maxTimeLength)
         maxTimeLength  = timeTable{ix, numOfJob}.end;
     end
 end
-
+maxTimeLength
+%drawGanttChart2007
 end
