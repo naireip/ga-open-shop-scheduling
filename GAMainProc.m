@@ -38,7 +38,7 @@ for i=1:(pop_size*Pc/2)  %因為crossover是以對為單位
 end
 
 for i=1:round(pop_size*Pm)
-   a=abs(ceil(rand(1,1)*10));
+   a=abs(ceil(rand(1,1)*pop_size));
    if a==0
       a=a+1 ;  
    end
