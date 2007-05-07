@@ -63,7 +63,7 @@ numOfJob=size(jobInfo,2)
    numOfGen=str2num(answer{3})
    pop_size=str2num(answer{4})
    
-   swCrossover=menu('Which CrossOver method you wanna use?','PartialMapXover','OrderXover','CyclicXover','PosBasedOX','OrderBasedOX')
+   swCrossover=menu('Which CrossOver method you wanna use?','PartialMapXover','OrderXover','CyclicXover','PosBasedOX','OrderBasedOX','SubTourOX','HeuristicOX')
    %swCrossover=2
    swMutation=menu('Which mutation method you want to use ? ', ' randExMut ','ShiftMut' )
    %swMutation=1
