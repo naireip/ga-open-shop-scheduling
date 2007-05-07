@@ -48,21 +48,22 @@ for i=1:round(pop_size*Pm)
 end
 
 %GA_object            %計算所有染色體的目標值
-maxValue = 0;
+%maxValue = 0;
+%for ix=1:size(chromosome,1)
+%    if maxValue < completeTime(chromosome(ix,:))
+%       maxValue = completeTime(chromosome(ix,:));
+%    end
+%end
+
 for ix=1:size(chromosome,1)
-    if maxValue < completeTime(chromosome(ix,:))
-       maxValue = completeTime(chromosome(ix,:));
-    end
-end
-maxValue
-for ix=1:size(chromosome,1)
-   objValue(ix)= maxValue - completeTime(chromosome(ix,:));
+   objValue(ix)= completeTime(chromosome(ix,:));
 end
 objValue;
 ObjChromosome=[objValue',chromosome];
 
 %GA_selection         %會淘汰目標值較差的染色體
-sortedOandC=flipud(sortrows(ObjChromosome)) ;                %注意目前的染色體已排序 ，暫用如此的方式
+%sortedOandC=flipud(sortrows(ObjChromosome)) ;                %注意目前的染色體已排序 ，暫用如此的方式
+sortedOandC=(sortrows(ObjChromosome)) ;                %注意目前的染色體已排序 ，暫用如此的方式
 ObjChromosome=sortedOandC(1:pop_size,:);
 
 chromosome=ObjChromosome(:,2:size(ObjChromosome,2) );
@@ -100,8 +101,8 @@ if swDynaGraph==1
   end
   grid on
   xlabel('世代數')
-  ylabel('completeTime')
-  title(['使用基因演算法的complete Time變化折線圖,  第1代到第',num2str(TotalGen),'代'] )
+  ylabel('Weighted Complete Time')
+  title(['使用基因演算法的Weighted Complete Time變化折線圖,  第1代到第',num2str(TotalGen),'代'] )
 
   %axis fill tight
 end
