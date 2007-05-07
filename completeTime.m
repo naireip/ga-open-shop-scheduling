@@ -5,7 +5,8 @@ global numOfMach
 global numOfJob
 global timeTable
 global jobDealOrder
-%load jobInfo.txt
+load jobInfo.txt
+%load Va
 pureJobInfo = jobInfo(2:end-1,:)
 jobWeight = jobInfo(end, :);
 %Va = [5 2 3 4 6 7 8 9 1]; %max=44
@@ -14,11 +15,12 @@ jobWeight = jobInfo(end, :);
 %Va =[ 1 8 9 3 7 2 6 5 4]
 %Va =[ 3 5 8 7 9 2 1 4 6]
 %Va = [5,2,4,3,8,6,1,7,9]
+Va =[5 2 3 4 6 7 8 9 1]
 %Va =[8,6,9,1,3,5,2,7,4]  %max=39
 %Va=[ 5 8 2 4 7 1 6 9 3]   %max=70
 save Va
-%numOfMach =3
-%numOfJob = 3
+numOfMach =3
+numOfJob = 3
 % Machine deal order
 numOfMach 
 numOfJob 
@@ -109,7 +111,7 @@ for ix = 1: numOfMach
                        %find out the empty index and use the empty ones to find out the min to scheduling first                     
                       compareArray = pureJobInfo(emptyCellIndex, unique(jobDealOrder(emptyCellIndex,ix)))
                       multipartIdx{1}
-                      find(original_compareArray == min(compareArray ) )
+                   %   find(original_compareArray == min(compareArray ) )
                        
                        for gx = 1: length(original_compareArray)
                            if (original_compareArray(gx) == min(compareArray) )

@@ -37,6 +37,6 @@ chromosome;
 
    fprintf('\n');
 for ix=1:num
-   fprintf('job_seq_%3d= %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d \n',ix,chromosome(ix,1:siz))
+   fprintf('job_seq_%3d= %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d \n',ix,chromosome(ix,1:siz))
    fprintf('\n')
 end   

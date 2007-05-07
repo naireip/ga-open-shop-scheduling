@@ -2,6 +2,7 @@ function gaProblemgen()
 global numOfMach
 global numOfJob
 
+
 prompt={'How many machines in problem?',' How many jobs?','If the job''s process time is integer uniform distribution between [a,b] , a = ?','b = ?', ...
         'If the job''s weight is integer uniform distribution between [c,d], c = ?','d = ?'};
 

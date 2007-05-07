@@ -23,7 +23,7 @@ global TotalRun
 close all
 Ans=menu('你是否要使用隨機問題產生器?','是的，我要用','不用了，我讀取檔案中的範例即可');
 if Ans==1
-  % gaProblemgen
+   %gaProblemgen
    load Problem
    jobInfo=Problem
 else   

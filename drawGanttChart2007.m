@@ -1,6 +1,7 @@
 function drawGanttChart2007()
 global timeTable
-
+global jobInfo
+jobWeight = jobInfo(end, :);
 timeTable
 %determine color
 figure
@@ -33,6 +34,24 @@ set(gca,'YTickLabel',MachineLabel)
 set(gcf,'position',[ 1 29 1024 672 ]) %1024*768將螢幕放到最大，要注意解析度的問題
 xlabel('time')
 
+
+% 計算weighted complete time
+completeTime = zeros(1,3);
+%================================================
+for ix =1: size(timeTable,2) 
+    for jx = size(timeTable,1) :-1:1
+        for kx = size(timeTable,2) :-1:1
+            if (timeTable{jx, kx}.job_no == ix && timeTable{jx,kx}.end > completeTime(ix))
+                completeTime(ix) = timeTable{jx,kx}.end
+            end
+        end
+    end
+end
+completeTime;
+
+weightedCompleteTime = sum(completeTime.*jobWeight);
+%========================================================
+
 maxTimeLength = timeTable{1, size(timeTable,2)    }.end;
 for ix = 1:  size(timeTable,1)         
     if (timeTable{ix,  size(timeTable,2)      }.end > maxTimeLength)
@@ -40,4 +59,4 @@ for ix = 1:  size(timeTable,1)
     end
 end
 
-title(['Complete Time is : ', num2str(maxTimeLength)])
+title(['Weighted Complete Time is : ', num2str(weightedCompleteTime)])
