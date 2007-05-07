@@ -1,4 +1,4 @@
-function  [maxTimeLength, timeTable] = completeTime(Va)
+function  [weightedCompleteTime, timeTable] = completeTime(Va)
 global jobInfo
 global c
 global numOfMach
@@ -236,7 +236,23 @@ for col =1:size(cTable,2)
         end
 end
 
+% ­pºâweighted complete time
+completeTime = zeros(1,3);
 %================================================
+for ix =1: numOfJob
+    for jx = numOfMach:-1:1
+        for kx = numOfJob:-1:1
+            if (timeTable{jx, kx}.job_no == ix && timeTable{jx,kx}.end > completeTime(ix))
+                completeTime(ix) = timeTable{jx,kx}.end
+            end
+        end
+    end
+end
+completeTime
+
+weightedCompleteTime = sum(completeTime.*jobWeight)
+
+%=============================================
 
 maxTimeLength = timeTable{1,numOfJob}.end;
 for ix = 1: numOfMach   
