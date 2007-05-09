@@ -85,9 +85,9 @@ if swDynaGraph==1
 
   for ix=TotalGen:size(everyGenResult,1)
      temp(ix)=completeTime(everyGenResult{ix,1}(1,:) );
-  end 
+  end
 
-  set(gca,'ylim',[min(temp)-10, max(temp)+10])
+
 
   for ix=1:size(everyGenResult,1)-1
      plot([ix,ix+1],[temp(ix),temp(ix+1)],'y--');
@@ -105,6 +105,14 @@ if swDynaGraph==1
   title(['使用基因演算法的Weighted Complete Time變化折線圖,  第1代到第',num2str(TotalGen),'代'] )
 
   %axis fill tight
+  try
+  graphYMin = min(temp(:));
+  graphYMax = max(temp(:));
+  set(gca,'ylim',[graphYMin-20,   graphYMax+20])
+catch
+    graphYMin
+    graphYMax
+end
 end
 
 
