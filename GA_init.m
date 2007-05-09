@@ -4,9 +4,10 @@ global Pm
 global Pc
 global chromosome
 global everyGenResult
-global numOfGen    %要跑的總世代數上限
-global swCrossover %選擇各種交配的開關
-global swMutation    %選擇各種突變的開關
+global swSelection % the switch of Selection method
+global numOfGen    % the total generation we want to run 
+global swCrossover % the switch of crossover method
+global swMutation   % the switch of mutation method
 global swDynaGraph
 global pop_size
 global TotalGen
@@ -22,20 +23,20 @@ Ans=menu('Do you want to use the random generator?','Yes，I wanna use.','No, jus
 if Ans==1
    gaProblemgen
    load Problem
-   jobInfo=Problem
+   jobInfo=Problem  %load the generated Problem back 
 else   
    load jobInfo.txt
 end
 
 
-boundGen= numOfGen ;  %目前是設為要跑的總世代數上限
+boundGen= numOfGen ;  %is the bound of the generation number we want to execute GA algorithm
 %someValue = 0.001  %判別最佳解是否已經收斂
 
 
-TotalGen=0;     %到目前為止的總世代數  
+TotalGen=0;     %the total Generation number till now
 chromosome=[];
 everyGenResult=[];
-NowGen=1; %目前是初代染色體
+NowGen = 1; %NowGen is the first Generation
 
 numOfMach=size(jobInfo,1)-2
 numOfJob=size(jobInfo,2)
@@ -63,9 +64,11 @@ numOfJob=size(jobInfo,2)
    numOfGen=str2num(answer{3})
    pop_size=str2num(answer{4})
    
+   swSelection = menu('Which Selection method you wanna use?','mu-Selection','randomSelection')
+   swSelection =1;
    swCrossover=menu('Which CrossOver method you wanna use?','PartialMapXover','OrderXover','CyclicXover','PosBasedOX','OrderBasedOX','SubTourOX','HeuristicOX')
    %swCrossover=2
-   swMutation=menu('Which mutation method you want to use ? ', ' randExMut ','ShiftMut' )
+   swMutation=menu('Which mutation method you want to use ? ', ' randExMut ','ShiftMut','orderMut','inversionMut','InsertionMut')
    %swMutation=1
    swDynaGraph=menu('Do you want dynamic graph plotting?','YES','NO')
    %swDynaGraph=1
