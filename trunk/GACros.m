@@ -3,7 +3,7 @@ global swCrossover
 
 switch(swCrossover)
    
-case 1,      [newVa,newVb]=PMX(Va,Vb);
+case 1,      [newVa,newVb]=partmapXover(Va,Vb);
    
         %PMX
 case 2,       [newVa,newVb]=OX(Va,Vb);
