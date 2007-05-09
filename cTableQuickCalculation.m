@@ -12,11 +12,11 @@ pureJobInfo = jobInfo(2:end-1,:)
 
 for rx = 1: numOfMach
     for cx = 1: numOfJob
-      tempTable(rx,cx)= struct('jobName',jobDealOrder(rx,cx),'procTime',pureJobInfo(rx,jobDealOrder(rx,cx)))
+      tempTable(rx,cx)= struct('jobName',jobDealOrder(rx,cx),'procTime',pureJobInfo(rx,jobDealOrder(rx,cx)));
     end
 end
 
-cTable2 = cell(numOfMach, numOfJob)
+cTable2 = cell(numOfMach, numOfJob);
 %determined the processing order
 for cx = 1: numOfJob
          boolAllDiffInCol = isThereAllDifferentJobInCol(tempTable,cx);         
@@ -26,14 +26,14 @@ for cx = 1: numOfJob
 
     if (boolAllDiffInCol == 1)
         for rx =1: numOfMach           
-            cTable2{rx,cx}=[tempTable(rx,cx).procTime, 1 ]
+            cTable2{rx,cx}=[tempTable(rx,cx).procTime, 1 ];
         end
     else  %there are same job name in col cx
          for job = 1: numOfJob
              sameJobIndex = find(jobDealOrder(:,cx) == job) 
              [orderVal, orderIdx] =sort(beComparedVal(sameJobIndex) );
              for sx =1 : length(sameJobIndex)
-                 cTable2{sameJobIndex(sx),cx}=[tempTable(sameJobIndex(sx),cx).procTime, find(orderVal==tempTable(sameJobIndex(sx),cx).procTime)]
+                 cTable2{sameJobIndex(sx),cx}=[tempTable(sameJobIndex(sx),cx).procTime, find(orderVal==tempTable(sameJobIndex(sx),cx).procTime)];
              end
          end   
     end
