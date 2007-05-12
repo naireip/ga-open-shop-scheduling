@@ -13,4 +13,4 @@ about 4/30/2007凌晨開始寫程式
 2007/5/7 準備收尾，那個PMX有問題
 2007/5/8 新增二個crossover method(Heuristic, SubTour )
 2007/5/9 新增三個mutation method,PMX換掉（未測試）
- 
+ 2007/5/11 似乎全正確了
