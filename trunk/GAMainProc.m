@@ -10,6 +10,7 @@ global TotalGen
 global jobInfo
 global someValue
 global swDynaGraph
+global swSelection
 global temp
 global c          %every job of machine makespan
 global TotalGen
@@ -58,13 +59,21 @@ end
 for ix=1:size(chromosome,1)
    objValue(ix)= completeTime(chromosome(ix,:));
 end
+
 objValue;
 ObjChromosome=[objValue',chromosome];
 
 %GA_selection         %會淘汰目標值較差的染色體
-%sortedOandC=flipud(sortrows(ObjChromosome)) ;                %注意目前的染色體已排序 ，暫用如此的方式
-sortedOandC=(sortrows(ObjChromosome)) ;                %注意目前的染色體已排序 ，暫用如此的方式
+if swSelection ==1 
+    figure(2)
+    %sortedOandC=flipud(sortrows(ObjChromosome)) ;                %注意目前的染色體已排序 ，暫用如此的方式
+    sortedOandC=(sortrows(ObjChromosome)) ;                %注意目前的染色體已排序 ，暫用如此的方式
 ObjChromosome=sortedOandC(1:pop_size,:);
+else %swSelection = 2
+    randomSelectedIdx = randperm(length(ObjChromosome))
+    randomSelectedIdx = randomSelectedIdx(1:pop_size)
+    ObjChromosome=ObjChromosome(randomSelectedIdx, :);
+end
 
 chromosome=ObjChromosome(:,2:size(ObjChromosome,2) );
 

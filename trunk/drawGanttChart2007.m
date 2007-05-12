@@ -36,7 +36,7 @@ xlabel('time')
 
 
 % ­pºâweighted complete time
-completeTime = zeros(1,3);
+completeTime = zeros(1, size(timeTable,2));
 %================================================
 for ix =1: size(timeTable,2) 
     for jx = size(timeTable,1) :-1:1

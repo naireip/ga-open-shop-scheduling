@@ -34,7 +34,7 @@ GA_init            % to generate the initial chromosome, and just iniialize some
 while TotalGen < numOfGen
     GAMainProc
 end
-
+save timeTable
 %Graphical Interface output------------------
 %Tell the user what kind of Crossover & Mutation they used
 %drawGanttChart
