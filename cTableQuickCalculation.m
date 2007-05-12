@@ -11,7 +11,7 @@ pureJobInfo = jobInfo(2:end-1,:)
 %initialize the necessary information
 
 for rx = 1: numOfMach
-    for cx = 1: numOfJob
+    for cx = 1: numOfJob   
       tempTable(rx,cx)= struct('jobName',jobDealOrder(rx,cx),'procTime',pureJobInfo(rx,jobDealOrder(rx,cx)));
     end
 end

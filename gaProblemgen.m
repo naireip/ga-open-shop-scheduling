@@ -6,7 +6,7 @@ global numOfJob
 prompt={'How many machines in problem?',' How many jobs?','If the job''s process time is integer uniform distribution between [a,b] , a = ?','b = ?', ...
         'If the job''s weight is integer uniform distribution between [c,d], c = ?','d = ?'};
 
-def={'10','10','1','10','1','10' };    % def specifies the default value to display for each prompt.
+def={'3','3','1','10','1','10' };    % def specifies the default value to display for each prompt.
  dlgTitle=['Problem Generator'];
    lineNo=1;
    answer=inputdlg(prompt,dlgTitle,lineNo,def);

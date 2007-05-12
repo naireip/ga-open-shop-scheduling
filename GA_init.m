@@ -64,7 +64,7 @@ numOfJob=size(jobInfo,2)
    numOfGen=str2num(answer{3})
    pop_size=str2num(answer{4})
    
-   swSelection = menu('Which Selection method you wanna use?','mu-Selection','randomSelection')
+   swSelection = menu('Which Selection method you wanna use?','mu+rambda-Selection','randomSelection')
    swSelection =1;
    swCrossover=menu('Which CrossOver method you wanna use?','PartialMapXover','OrderXover','CyclicXover','PosBasedOX','OrderBasedOX','SubTourOX','HeuristicOX')
    %swCrossover=2
@@ -72,7 +72,7 @@ numOfJob=size(jobInfo,2)
    %swMutation=1
    swDynaGraph=menu('Do you want dynamic graph plotting?','YES','NO')
    %swDynaGraph=1
-   gen_chromosome(pop_size,numOfJob * numOfMach)   %size denote how many jobs
+   gen_chromosome(pop_size,numOfJob * numOfMach);   %size denote how many jobs
 %debug====================================================
 
 

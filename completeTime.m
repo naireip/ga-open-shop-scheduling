@@ -8,9 +8,12 @@ global jobDealOrder
 %load jobInfo.txt
 %load Va
 % jobInfo =[1 2 3 4 5;1 2 3 4 5;6 7 8 9 10;11 12 13 14 15;16 17 18 19 20;21 22 23 24 25;2 1 5 3 4]
-% 
-% Va = [  24     8    21    25    15     2    22    16    19    10     7     4     3    11    14     6    12    23     9    5    20    18    13    17     1]
+%jobInfo =[1 2 3 4 5;1 20 18 21 6;10 2 25 7 12;14 17 3 16 15;13 8 24 4 11; 9 22 19 23 5; 2 1 5 3 4]
+%Va = [  24     8    21    25    15     2    22    16    19    10     7     4     3    11    14     6    12    23     9    5    20    18    13    17     1]
 %  
+
+% jobInfo =[1 2 3;1 20 18; 10 2 25; 14 17 3; 13 8 24; 9 22 19; 6 8 7; 2 1 3]
+% Va =[8 15 2 16 10 7 4 3 11 14 6 12 9 5 18 13 17 1]
 pureJobInfo = jobInfo(2:end-1,:)
 jobWeight = jobInfo(end, :);
 %Va = [5 2 3 4 6 7 8 9 1]; %max=44
@@ -23,20 +26,21 @@ jobWeight = jobInfo(end, :);
 %Va =[8,6,9,1,3,5,2,7,4]  %max=39
 %Va=[ 5 8 2 4 7 1 6 9 3]   %max=70
 %save Va
-% numOfMach =5
-% numOfJob = 5
+%  numOfMach =6
+%  numOfJob = 3
 % Machine deal order
 numOfMach 
 numOfJob 
 
-
-tmpReshape =reshape(Va, numOfMach, numOfJob)'
-jobDealOrder = zeros(numOfJob, numOfMach);
+length(Va)
+tmpReshape =reshape(Va, numOfJob, numOfMach)'
+jobDealOrder = zeros(numOfMach, numOfJob)
 
 for ix =1 : numOfMach    
     for jx = 1: length(Va)
        if ( Va(jx) <= length(Va)/numOfMach * ix   & Va(jx) >  length(Va)/numOfMach * (ix-1) )
            if (sum(jobDealOrder(ix, :)) == 0 ) % jobDealOrder IS EMPTY
+               ix
                jobDealOrder(ix, 1) =  Va(jx);
            else               
                jobDealOrder(ix, sum(jobDealOrder(ix,:)~= 0)+1 ) =  Va(jx);
@@ -44,9 +48,9 @@ for ix =1 : numOfMach
        end 
     end
 end
-A = mod(jobDealOrder,numOfMach)
+A = mod(jobDealOrder,numOfJob)
 
-A (find(mod(A,numOfMach) ==0 ) )= numOfMach
+A (find(mod(A,numOfJob) ==0 ) )= numOfJob
 jobDealOrder = A
 clear A c tmpReshape 
 
@@ -239,7 +243,7 @@ for col =1:size(cTable,2)
 end
 
 % ­pºâweighted complete time
-completeTime = zeros(1,numOfMach);
+completeTime = zeros(1,numOfJob);
 %================================================
 for ix =1: numOfJob
     for jx = numOfMach:-1:1
@@ -250,7 +254,7 @@ for ix =1: numOfJob
         end
     end
 end
-completeTime
+completeTime =completeTime(find(completeTime ~=0))
 
 weightedCompleteTime = sum(completeTime.*jobWeight)
 
