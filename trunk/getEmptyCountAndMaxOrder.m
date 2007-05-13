@@ -8,10 +8,10 @@ global jobDealOrder
           if( isempty(toBeDetermineCol{ixx}) )
                emptyCnt = emptyCnt + 1;
                if toBeDetermineOrderCol(ixx) > maxOrder
-                   maxOrder = toBeDetermineOrderCol(ixx)
+                   maxOrder = toBeDetermineOrderCol(ixx);
                end
           end            
         end        
-         emptyCnt 
-        maxOrder
+%          emptyCnt 
+%         maxOrder
         return
