@@ -3,7 +3,7 @@ function newVa = InsertionMut(Va)
 %position
 
 %fprintf('original Va is:\n')
-Va= [  8   7   4   2   6   5   1   9   3  10 ]
+%Va= [  8   7   4   2   6   5   1   9   3  10 ]
 original_Va=Va;
 randomVal=[]; %initialize randomVal
 
