@@ -13,5 +13,5 @@ for cx = 1: col
     end
 end
 
-maxRowEndTime
+%maxRowEndTime
 return

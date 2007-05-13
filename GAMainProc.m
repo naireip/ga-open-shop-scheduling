@@ -62,16 +62,15 @@ end
 
 objValue;
 ObjChromosome=[objValue',chromosome];
-
+  figure(2)
 %GA_selection         %會淘汰目標值較差的染色體
 if swSelection ==1 
-    figure(2)
-    %sortedOandC=flipud(sortrows(ObjChromosome)) ;                %注意目前的染色體已排序 ，暫用如此的方式
+      %sortedOandC=flipud(sortrows(ObjChromosome)) ;                %注意目前的染色體已排序 ，暫用如此的方式
     sortedOandC=(sortrows(ObjChromosome)) ;                %注意目前的染色體已排序 ，暫用如此的方式
 ObjChromosome=sortedOandC(1:pop_size,:);
 else %swSelection = 2
     randomSelectedIdx = randperm(length(ObjChromosome))
-    randomSelectedIdx = randomSelectedIdx(1:pop_size)
+    randomSelectedIdx = randomSelectedIdx(1:pop_size);
     ObjChromosome=ObjChromosome(randomSelectedIdx, :);
 end
 
@@ -79,9 +78,13 @@ chromosome=ObjChromosome(:,2:size(ObjChromosome,2) );
 
 everyGenResult{TotalGen,1}=chromosome;
 everyGenResult{TotalGen,2}=sortedOandC(1,1);
+strSymbol=' %4d';
+for ix=1:length(chromosome)
+    strSymbol =strcat(strSymbol, ' %4d');
+end
 
-fprintf('到目前為止的最佳 complete time 是%d\n',  completeTime(chromosome(1,:)));
-fprintf('到目前為止的最佳job_seq是 %d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d \n' ,  chromosome(1,:) );
+fprintf('到目前為止的最佳 Weighted complete time 是%d\n',  completeTime(chromosome(1,:)));
+fprintf(['到目前為止的最佳job_seq是 : ',strSymbol,'\n'] ,  chromosome(1,:) );
 
 
 

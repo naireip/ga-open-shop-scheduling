@@ -14,7 +14,7 @@ global jobDealOrder
 
 % jobInfo =[1 2 3;1 20 18; 10 2 25; 14 17 3; 13 8 24; 9 22 19; 6 8 7; 2 1 3]
 % Va =[8 15 2 16 10 7 4 3 11 14 6 12 9 5 18 13 17 1]
-pureJobInfo = jobInfo(2:end-1,:)
+pureJobInfo = jobInfo(2:end-1,:);
 jobWeight = jobInfo(end, :);
 %Va = [5 2 3 4 6 7 8 9 1]; %max=44
 %Va =[ 9 8 4 5 6 7 1 2 3] %51
@@ -29,18 +29,18 @@ jobWeight = jobInfo(end, :);
 %  numOfMach =6
 %  numOfJob = 3
 % Machine deal order
-numOfMach 
-numOfJob 
+% numOfMach 
+% numOfJob 
 
-length(Va)
-tmpReshape =reshape(Va, numOfJob, numOfMach)'
-jobDealOrder = zeros(numOfMach, numOfJob)
+%length(Va)
+tmpReshape =reshape(Va, numOfJob, numOfMach)';
+jobDealOrder = zeros(numOfMach, numOfJob);
 
 for ix =1 : numOfMach    
     for jx = 1: length(Va)
        if ( Va(jx) <= length(Va)/numOfMach * ix   & Va(jx) >  length(Va)/numOfMach * (ix-1) )
            if (sum(jobDealOrder(ix, :)) == 0 ) % jobDealOrder IS EMPTY
-               ix
+               %ix
                jobDealOrder(ix, 1) =  Va(jx);
            else               
                jobDealOrder(ix, sum(jobDealOrder(ix,:)~= 0)+1 ) =  Va(jx);
@@ -48,10 +48,10 @@ for ix =1 : numOfMach
        end 
     end
 end
-A = mod(jobDealOrder,numOfJob)
+A = mod(jobDealOrder,numOfJob);
 
-A (find(mod(A,numOfJob) ==0 ) )= numOfJob
-jobDealOrder = A
+A (find(mod(A,numOfJob) ==0 ) )= numOfJob;
+jobDealOrder = A;
 clear A c tmpReshape 
 
 cTable = cell(numOfMach, numOfJob);  %by using cTable to determine the processing order of the same job (multiple groups)
@@ -60,108 +60,7 @@ timeTable = cell(numOfMach, numOfJob);
 %Next, following the jobDealOrder , we will decide which job should be process first
 %while in the same order, shortest processing time first
 
-
-% % % for ix = 1: numOfMach    
-% % %         if ( length(unique(jobDealOrder(:,ix))) < numOfJob)  % if there has the same jobOrder
-% % %            jobDealOrder(:,ix) %the column we focused
-% % %           % uniqueRows = unique(jobDealOrder(:,ix)) %find out row of the same value  in Col ix              
-% % %                [N,Bin] = histc(jobDealOrder(:,ix),1:numOfJob);  %find out the larger multiple parts
-% % %                %Binis the index of order N(K)=sum(BIN==k)
-% % %                N
-% % %                % find out 1's ,then scheule it
-% % %                [cndIx] = find(N>1) %canNotDetermineNow
-% % %                find(N == 1 )
-% % %                shouldBeScheduleNow = find(N == 1 ) 
-% % %                %find out the location in jobDealOrder
-% % %                kxx =1;
-% % %                shouldBeShceduleNowIndex=[];
-% % %                for nxx = 1: length(shouldBeScheduleNow)
-% % %                    shouldBeShceduleNowIndex(kxx)  = find (jobDealOrder(:,ix) == shouldBeScheduleNow(kxx) )
-% % %                    kxx = kxx+1;
-% % %                end
-% % %                for nx = 1: length(shouldBeScheduleNow)
-% % %                    %the content in cTable{,} is [processing time , processing order]
-% % %                    
-% % %                    cTable{shouldBeShceduleNowIndex(nx),ix} = [ pureJobInfo(shouldBeShceduleNowIndex(nx),shouldBeScheduleNow(nx)) , 1] % the latest 1 denote to be scheduling first 
-% % %                  %  timeTable{shouldBeShceduleNowIndex(nx),ix} = struct('start',0,'end',pureJobInfo(shouldBeShceduleNowIndex(nx),shouldBeScheduleNow(nx)), 'job_no',shouldBeShceduleNowIndex(nx))
-% % %                end
-% % %                directOrderList =1:length(N);
-% % %                multipart = directOrderList(find ( (N >1) >0 ))   %which job numbers are multiple, can not be determine the order now
-% % %                for mx = 1: length(multipart) 
-% % %                    jobDealOrder(multipart(mx))
-% % %                    multipart(mx)
-% % % %                    multipartIdx{mx} = find(jobDealOrder(:,ix) == jobDealOrder(multipart(mx),ix))
-% % %                      multipartIdx{mx} = find(jobDealOrder(:,ix) == multipart(mx))
-% % %                end 
-% % %                
-% % %                %find out the processing order of same job 
-% % %                length(multipartIdx) 
-% % %                for kx = 1: length(multipartIdx) 
-% % %                    %find out the original index of the min time job
-% % %                    %judge to a while loop for rank out the order 1,2, 3,,..... 
-% % %                    orderIndex =1;
-% % %                    % HOW MANY empty cell in cTable{ix, multipartIdx}
-% % %                    %-==============================
-% % %                    emptyCellCnt =0;
-% % %                    emptyCellIndex=[];
-% % %                    jxx =1;
-% % %                    multipartIdx{kx}
-% % %                    for ixx=1:numOfMach
-% % %                        if(isempty(cTable{ixx,ix}) )
-% % %                           emptyCellCnt = emptyCellCnt + 1;
-% % %                           emptyCellIndex(jxx)=ixx;
-% % %                           jxx = jxx +1;
-% % %                        end
-% % %                    end
-% % %                    %-==============================
-% % %                    orderIndex = 1;
-% % %                    unique(jobDealOrder(emptyCellIndex,ix))
-% % %                      original_compareArray = pureJobInfo(:, unique(jobDealOrder(emptyCellIndex,ix)))
-% % %                    while(emptyCellCnt > 0 )  % while there  still some one is not deternined order
-% % %                        %find out the empty index and use the empty ones to find out the min to scheduling first                     
-% % %                       compareArray = pureJobInfo(emptyCellIndex, unique(jobDealOrder(emptyCellIndex,ix)))
-% % %                       multipartIdx{1}
-% % %                    %   find(original_compareArray == min(compareArray ) )
-% % %                        
-% % %                        for gx = 1: length(original_compareArray)
-% % %                            if (original_compareArray(gx) == min(compareArray) )
-% % %                                   scheduleFirstIndex  = gx;
-% % %                            end
-% % %                        end
-% % %                        
-% % %         %               scheduleFirstIndex =  find(original_compareArray == min(compareArray ) ) + multipartIdx{1}(1) -1  %kx denote the group number
-% % %                        %   needToCompareGroup{ix,kx} = min(pureJobInfo(ix, multipartIdx{kx} )  )
-% % %                         tmp = jobDealOrder(:,ix)
-% % %                        cTable{scheduleFirstIndex, ix} = [pureJobInfo(scheduleFirstIndex, tmp(scheduleFirstIndex) ), orderIndex]
-% % %                        orderIndex = orderIndex +1;  
-% % %                        
-% % %                        %-==============================
-% % %                        emptyCellCnt =0;
-% % %                        emptyCellIndex=[];
-% % %                        jxx =1;
-% % %                      %   for ixx=1:length(multipartIdx{kx})
-% % %                          for ixx= 1: numOfMach  
-% % %                                if(isempty(cTable{ixx,ix}) )
-% % %                                   emptyCellCnt = emptyCellCnt + 1;
-% % %                                   emptyCellIndex(jxx)=ixx;
-% % %                                   jxx = jxx +1;
-% % %                                end
-% % %                         end                   
-% % %                       %-==============================
-% % %                    end
-% % %                end
-% % %         else  % job order can be determined immediately
-% % %             %tmpProcTime = pureJobInfo(:,ix);
-% % %             for i =1: numOfMach
-% % %            temp(i) =  pureJobInfo(i,jobDealOrder(i, ix))
-% % %             end
-% % %             
-% % %            for idx = 1: size(pureJobInfo,1)                
-% % %                 cTable{idx, ix} = [temp(idx),1];   % the latest 1 denote to be scheduling first
-% % %             end
-% % %         end
-% % % end
- cTable = cTableQuickCalculation   %the other quick method  to calculate 
+ cTable = cTableQuickCalculation;   %the other quick method  to calculate 
 % Till now, we use cTable to record the processing time and processing order, and the determing process is finished. 
 timeTable =cell(size(cTable))  ;%this time table is for draw the gantt chart
 toBeDetermineOrderCol = cell(1,1);
@@ -194,16 +93,16 @@ for col =1:size(cTable,2)
               minTimeValue = cTable{idx(1),col}(1);
               TempIdx=idx(1);
               for dx =1:length(idx)
-                  dx;
-                  fprintf('the col =%d\n',col);
-                  fprintf('the row =%d\n',idx(dx));
+                 % dx;
+                 % fprintf('the col =%d\n',col);
+                 % fprintf('the row =%d\n',idx(dx));
                  if (cTable{idx(dx),col}(1) < minTimeValue && isempty(timeTable{idx(dx),col}) )
                      minTimeValue = cTable{idx(dx),col}(1);
                      TempIdx = idx(dx);
                  end                 
               end
-               fprintf('the col =%d\n',col)
-                  fprintf('the row =%d\n',idx(dx))
+%                fprintf('the col =%d\n',col)
+%                   fprintf('the row =%d\n',idx(dx))
               idx = TempIdx;         
               sameJob = cell(1,1);
               %find out the max value of same job end time
@@ -254,9 +153,9 @@ for ix =1: numOfJob
         end
     end
 end
-completeTime =completeTime(find(completeTime ~=0))
+completeTime =completeTime(find(completeTime ~=0));
 
-weightedCompleteTime = sum(completeTime.*jobWeight)
+weightedCompleteTime = sum(completeTime.*jobWeight);
 
 %=============================================
 
@@ -266,6 +165,6 @@ for ix = 1: numOfMach
         maxTimeLength  = timeTable{ix, numOfJob}.end;
     end
 end
-maxTimeLength
+maxTimeLength;
 %drawGanttChart2007
 end

@@ -7,7 +7,7 @@ global timeTable
 global jobDealOrder
 global cTable
 
-pureJobInfo = jobInfo(2:end-1,:)
+pureJobInfo = jobInfo(2:end-1,:);
 %initialize the necessary information
 
 for rx = 1: numOfMach
@@ -30,7 +30,7 @@ for cx = 1: numOfJob
         end
     else  %there are same job name in col cx
          for job = 1: numOfJob
-             sameJobIndex = find(jobDealOrder(:,cx) == job) 
+             sameJobIndex = find(jobDealOrder(:,cx) == job) ;
              [orderVal, orderIdx] =sort(beComparedVal(sameJobIndex) );
              for sx =1 : length(sameJobIndex)
                  cTable2{sameJobIndex(sx),cx}=[tempTable(sameJobIndex(sx),cx).procTime, find(orderVal==tempTable(sameJobIndex(sx),cx).procTime)];

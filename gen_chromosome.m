@@ -34,9 +34,14 @@ chromosome;
 %chromosome(r,:)=randperm(numOfJob)
 %   r=r+1;
 %end
+strSymbol=' %4d';
+for ix=1:siz
+    strSymbol =strcat(strSymbol, ' %4d');
+end
+
 
    fprintf('\n');
 for ix=1:num
-   fprintf('job_seq_%3d= %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d  %2d \n',ix,chromosome(ix,1:siz))
+   fprintf(['job_seq_%3d=', strSymbol,'\n'],ix,chromosome(ix,1:siz))
    fprintf('\n')
 end   
