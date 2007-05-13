@@ -59,3 +59,4 @@ for ix = 1:  size(timeTable,1)
 end
 
 title(['Weighted Complete Time is : ', num2str(weightedCompleteTime)])
+grid on
