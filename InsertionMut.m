@@ -12,7 +12,7 @@ while(length(randomVal)  <2)
 end
    toBeInsertVal = randomVal(1) ;
    toBeInsetPlace = randomVal(2);
-   orignalPlaceOfTheInsertedValue = find(Va == toBeInsertVal)
+   orignalPlaceOfTheInsertedValue = find(Va == toBeInsertVal);
    Va(orignalPlaceOfTheInsertedValue) = [];   
    tempVa = Va;
    if(orignalPlaceOfTheInsertedValue == 1)       

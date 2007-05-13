@@ -6,6 +6,12 @@ function [ch1,ch2] = partmapXover(par1,par2)
 % p1      - the first parent ( [solution string function value] )
 % p2      - the second parent ( [solution string function value] )
 
+% Step 1. Select two positions alogn the string uniformly at random. The
+%substrings defined by the two positions are called the mapping sections.
+% Step 2. Exchange two substrings between parents to produce proto-children.
+% Step 3. Determine the mapping relationship between two mapping sections.
+% Step 4. Legalize offspring with the mapping relationship.
+
 sz = size(par1,2)-1;
 pos1 = round(rand*sz + 0.5);
 pos2 = round(rand*sz + 0.5);
