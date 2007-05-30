@@ -16,4 +16,4 @@ Va(Ranpos(1))=Va(Ranpos(2));
 Va(Ranpos(2))=temp;
 %fprintf('After random mutation, Va is:\n')
 %Va
-newVa=Va;
+newVa=fliplr(Va);
